@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>Delete_User</title>
+	<link rel="stylesheet" href="css\style.css">
+	<style>
+		h1 {
+			color: #6a9955;
+		}
+	</style>
+</head>
+
+<body>
+    <%- include('./partials/pageList.ejs') %>
+
+	<form method="POST" action="/deleteduser">
+		<h1>Delete_User</h1>
+		<p>To delete a user, please enter their details here: </p>
+
+		<label for="username">Username: </label>
+		<input id="username" type="text" name="username" value="username" /><br />
+		<input type="submit" value="ok" />
+	</form>
+</body>
+
+</html>

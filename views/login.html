@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>Login</title>
+	<link rel="stylesheet" href="css\style.css">
+	<style>
+		h1 {
+			color: #6a9955;
+		}
+	</style>
+</head>
+
+<body>
+    <%- include('./partials/pageList.ejs') %>
+
+	<form method="POST" action="/loggedin">
+		<h1>Login</h1>
+		<p>To access all pages, you must log in. <br>If you do not have an account, you can register <a style='text-decoration: underline' href='/register'>here</a>.</p>
+
+		<label for="username">Username: </label>
+		<input id="username" type="text" name="username" value="username" /><br />
+		<label for="password">Password: </label>
+		<input id="password" type="text" name="password" value="********" /><br />
+		<input type="submit" value="ok" />
+	</form>
+</body>
+
+</html>
