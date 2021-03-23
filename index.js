@@ -1,9 +1,10 @@
 var express = require('express');
 var sanitizer = require('express-sanitizer');
 var session = require('express-session');
+const dotenv = require('dotenv').config();
 
 const app = express();
-const port = 8000;
+const port = process.env.PORT;
 
 app.use(express.static(__dirname + '/public'));
 app.use(express.urlencoded({ extended: true }));
@@ -23,8 +24,10 @@ MongoClient.connect(url, function (err, db) {
     db.close();
 });
 
+// require('./routes/utils')(app);
 require('./routes/main')(app);
 require('./routes/user')(app);
+require('./routes/admin')(app);
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 app.engine('html', require('ejs').renderFile);

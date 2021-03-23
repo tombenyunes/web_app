@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<title><%= title %></title>
+	<link rel="stylesheet" href="css\style.css">
+	<style>
+		h1 {
+			color: <%= color %>;
+		}
+	</style>
+</head>
+
+<body>
+    <%- include('../partials/pageList.ejs') %>
+
+	<h1><%= title %></h1>	
+
+	<!-- if an array is passed through then every element will be displayed as a separate paragraph -->
+	<% if (multipleMessages == true) { %>
+		<ul>
+		<% for (let i = 0; i < message.length; i++) { %>
+			<li><%= message[i] %></li>
+		<% } %>
+		</ul>
+	<% } %>
+	<% if (multipleMessages == false) { %>
+		<p><%= message %></p>
+	<% } %>
+
+</body>
+
+</html>

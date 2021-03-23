@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<title>User_List</title>
+	<link rel="stylesheet" href="css\style.css">
+	<style>
+		h1 {
+			color: #6a9955;
+		}
+	</style>
+</head>
+
+<body>
+	<%- include('./partials/pageList.ejs') %>
+
+	<h1>User_List</h1>
+	<p>All existing users are listed below:</p>
+
+	<ul>
+		<% users.forEach(function(user){ %>
+			<li>First Name: "<%= user.first %>",
+					Last Name: "<%= user.last %>",
+						Username: "<%= user.username %>",
+							Email: "<%= user.email %>",
+								Admin: <%=user.admin %>. </li>
+			<% }) %>
+	</ul>
+</body>
+
+</html>
