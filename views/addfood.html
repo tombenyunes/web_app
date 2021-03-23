@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>Add_Food</title>
+	<link rel="stylesheet" href="css\style.css">
+	<style>
+		h1 {
+			color: #ce723b;
+		}
+	</style>
+</head>
+
+<body>
+    <%- include('./partials/navBar.ejs') %>
+
+	<form method="POST" action="/foodadded">			
+		<h1>Add_Food</h1>
+		<p>Fill in the following form to add a food to the database:</p>
+
+		<label for="name"> Food Name: </label>
+		<input id="name" type="text" name="name" value="name" />
+		<br/>
+		<label for="price"> Food Price: </label>
+		<input id="price" type="text" name="price" value="price" />
+		<br/>
+		<br/>
+		<label for="price"> Typical Values: </label>
+		<input id="typicalValues" type="text" name="typicalValues" value="typical values" />
+		<br/>
+		<label for="price"> Unit of Typical Values: </label>
+		<select id="typicalValuesUnit" form="typicalValuesForm" name="typicalValuesUnit">
+			<option value="grams">Grams</option>
+			<option value="kilogram">Kilogram</option>
+			<option value="tablespoon">Tablespoon</option>
+			<option value="teaspoon">Teaspoon</option>
+			<option value="litre">Litre</option>
+			<option value="mililitre">Mililitre</option>
+		</select>
+		<br/>
+		<label for="price"> Calories: </label>
+		<input id="calories" type="text" name="calories" value="calories" />
+		<br/>
+		<label for="price"> Carbohydrates: </label>
+		<input id="carbohydrates" type="text" name="carbohydrates" value="carbohydrates" />
+		<br/>
+		<label for="price"> Fat: </label>
+		<input id="fat" type="text" name="fat" value="fat" />
+		<br/>
+		<label for="price"> Protein: </label>
+		<input id="protein" type="text" name="protein" value="protein" />
+		<br/>
+		<label for="price"> Salt: </label>
+		<input id="salt" type="text" name="salt" value="salt" />
+		<br/>
+		<label for="price"> Sugar: </label>
+		<input id="sugar" type="text" name="sugar" value="sugar" />
+		<br/>
+		<br/>
+
+		<!-- the user account that added the food -->
+		<label for="name"> Author: </label>
+		<input id="username" type="text" readonly="true" name="username" value="<%= username %>" />
+		<br/>
+
+		<input type="submit" value="OK" />
+	</form>
+</body>
+
+</html>

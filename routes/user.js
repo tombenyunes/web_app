@@ -31,7 +31,7 @@ module.exports = function (app)
             bcrypt.hash(plainPassword, saltRounds, function (err, hashedPassword) { // hash password				
                 MongoClient.connect(url, function (err, client) {
                     if (err) throw err;
-                    var db = client.db('mybookshopdb');
+                    var db = client.db(process.env.DATABASE_NAME);
                     db.collection(process.env.COLLECTION_USERS).insertOne({	// insert user data into database
                         first: req.body.first,
                         last: req.body.last,
@@ -61,7 +61,7 @@ module.exports = function (app)
 
         MongoClient.connect(url, function (err, client) {
             if (err) throw err;
-            var db = client.db('mybookshopdb');
+            var db = client.db(process.env.DATABASE_NAME);
             db.collection(process.env.COLLECTION_USERS).findOne({ username: req.body.username }, function (err, result) { // check if username occurs in database
                 if (!result) {
                     let title = 'Login Failed!';
@@ -119,7 +119,7 @@ module.exports = function (app)
 
         MongoClient.connect(url, function (err, client) {
             if (err) throw err;
-            var db = client.db('mybookshopdb');
+            var db = client.db(process.env.DATABASE_NAME);
             db.collection(process.env.COLLECTION_USERS).findOne({ username: req.body.username }, function (err, result) { // check if username occurs in database
                 if (err) throw err;
                 if (!result) {
@@ -146,7 +146,7 @@ module.exports = function (app)
         var url = process.env.DATABASE_PATH;
         MongoClient.connect(url, function (err, client) {
             if (err) throw err;
-            var db = client.db('mybookshopdb');
+            var db = client.db(process.env.DATABASE_NAME);
             db.collection(process.env.COLLECTION_USERS).find().toArray((findErr, results) => // find all users
             {
                 if (findErr) throw findErr;

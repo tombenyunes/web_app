@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<title>List_Foods</title>
+	<link rel="stylesheet" href="css\style.css">
+	<style>
+		h1 {
+			color: #ce723b;
+		}
+	</style>
+</head>
+
+<body>
+	<%- include('./partials/navBar.ejs') %>
+
+	<h1>List_Foods</h1>
+	<p>You can see names and prices of all available foods at our food shop here:</p>
+
+	<ul>
+		<% availableFoods.forEach(function(food){ %>
+			<li>
+				<%= food.name %>, £<%= food.price %>
+			</li>
+			<% }) %>
+	</ul>
+</body>
+
+</html>

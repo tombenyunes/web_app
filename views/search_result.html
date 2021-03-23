@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<title>Search_Results</title>
+	<link rel="stylesheet" href="css\style.css">
+	<style>
+		h1 {
+			color: #ce723b;
+		}
+	</style>
+</head>
+
+<body>
+    <%- include('./partials/navBar.ejs') %>
+
+	<h1> Search_Results: </h1>
+	<ul>
+		<% availableFoods.forEach(function(food){ %>
+			<li>
+				<%= food.name %> £<%= food.price %>
+						</h1>
+						<% }) %>
+	</ul>
+</body>
+
+</html>

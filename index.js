@@ -27,6 +27,7 @@ MongoClient.connect(url, function (err, db) {
 // require('./routes/utils')(app);
 require('./routes/main')(app);
 require('./routes/user')(app);
+require('./routes/food')(app);
 require('./routes/admin')(app);
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');

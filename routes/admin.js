@@ -11,9 +11,9 @@ module.exports = function (app)
 		MongoClient.connect(url, function (err, client)
 		{
 			if (err) throw err;
-			var db = client.db('mybookshopdb');
+			var db = client.db(process.env.DATABASE_NAME);
 			db.collection('users').deleteMany({}); // delete all from 'users'
-			db.collection('books').deleteMany({}); // delete all from 'books'
+			db.collection('foods').deleteMany({}); // delete all from 'foods'
 			
 			let title = 'Success';
 			let message = 'All data has been cleared.';

@@ -12,24 +12,30 @@
 </head>
 
 <body>
-    <%- include('./partials/pageList.ejs') %>
+    <%- include('./partials/navBar.ejs') %>
 
 	<form method="POST" action="/registered">
 		<h1>Register</h1>
 		<p>Please fill this form to register:</p>
 
-		<input id="admin" type="hidden" name="admin" value=<%= admin %>
+		<!-- (bool) if the account has administrator privileges -->
+		<input id="admin" type="hidden" name="admin" value=<%= admin %> 
 
 		<label for="first">First Name:</label>
-		<input id="first" type="text" name="first" value="first name" /><br />
+		<input id="first" type="text" name="first" value="first name" />
+		<br/>
 		<label for="last">Last Name: </label>
-		<input id="last" type="text" name="last" value="last name" /><br />
+		<input id="last" type="text" name="last" value="last name" />
+		<br/>
 		<label for="email">Email:</label>
-		<input id="email" type="text" name="email" value="example@domain.com" /><br />
+		<input id="email" type="text" name="email" value="example@domain.com" />
+		<br/>
 		<label for="username"> Username: </label>
-		<input id="username" type="text" name="username" value="username" /><br>
+		<input id="username" type="text" name="username" value="username" />
+		<br/>
 		<label for="password"> Password: </label>
-		<input id="password" type="text" name="password" value="********" /><br>
+		<input id="password" type="text" name="password" value="********" />
+		<br/>
 		<input type="submit" value="ok" />
 	</form>
 </body>

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>Search</title>
+	<link rel="stylesheet" href="css\style.css">
+	<style>
+		h1 {
+			color: #ce723b;
+		}
+	</style>
+</head>
+
+<body>
+    <%- include('./partials/navBar.ejs') %>
+
+	<h1>Search</h1>
+	<p>Search all foods below:</p>
+	<form action="/search-result" method="GET">
+		<input id="search-box" type="text" name="keyword" value="Default">
+		<input type="submit" value="SUBMIT">
+	</form>
+</body>
+
+</html>
