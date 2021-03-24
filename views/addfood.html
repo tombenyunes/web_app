@@ -14,53 +14,56 @@
 <body>
     <%- include('./partials/navBar.ejs') %>
 
-	<form method="POST" action="/foodadded">			
+	<form method="POST" action="/foodadded" id="mainForm">
 		<h1>Add_Food</h1>
 		<p>Fill in the following form to add a food to the database:</p>
 
 		<label for="name"> Food Name: </label>
-		<input id="name" type="text" name="name" value="name" />
+		<input id="name" type="text" name="name" value="foodName" />
 		<br/>
 		<label for="price"> Food Price: </label>
-		<input id="price" type="text" name="price" value="price" />
+		<input id="price" type="text" name="price" value="0" />
 		<br/>
 		<br/>
-		<label for="price"> Typical Values: </label>
-		<input id="typicalValues" type="text" name="typicalValues" value="typical values" />
+		<label for="typicalValues"> Typical Values Per: </label>
+		<input id="typicalValues" type="text" name="typicalValues" value="0" />
 		<br/>
-		<label for="price"> Unit of Typical Values: </label>
-		<select id="typicalValuesUnit" form="typicalValuesForm" name="typicalValuesUnit">
-			<option value="grams">Grams</option>
+
+		<label for="typicalValuesUnit"> Unit of Typical Values: </label>
+		<select form="mainForm" id="typicalValuesUnit" form="typicalValuesUnit" name="typicalValuesUnit">
+			<option value="grams">Gram</option>
 			<option value="kilogram">Kilogram</option>
-			<option value="tablespoon">Tablespoon</option>
-			<option value="teaspoon">Teaspoon</option>
-			<option value="litre">Litre</option>
 			<option value="mililitre">Mililitre</option>
+			<option value="litre">Litre</option>
+			<option value="teaspoon">Teaspoon</option>
+			<option value="tablespoon">Tablespoon</option>
+			<option value="cup">Cup</option>
 		</select>
+		
 		<br/>
-		<label for="price"> Calories: </label>
-		<input id="calories" type="text" name="calories" value="calories" />
+		<label for="calories"> Calories: </label>
+		<input id="calories" type="text" name="calories" value="0" />
 		<br/>
-		<label for="price"> Carbohydrates: </label>
-		<input id="carbohydrates" type="text" name="carbohydrates" value="carbohydrates" />
+		<label for="carbohydrates"> Carbohydrates: </label>
+		<input id="carbohydrates" type="text" name="carbohydrates" value="0" />
 		<br/>
-		<label for="price"> Fat: </label>
-		<input id="fat" type="text" name="fat" value="fat" />
+		<label for="fat"> Fat: </label>
+		<input id="fat" type="text" name="fat" value="0" />
 		<br/>
-		<label for="price"> Protein: </label>
-		<input id="protein" type="text" name="protein" value="protein" />
+		<label for="protein"> Protein: </label>
+		<input id="protein" type="text" name="protein" value="0" />
 		<br/>
-		<label for="price"> Salt: </label>
-		<input id="salt" type="text" name="salt" value="salt" />
+		<label for="salt"> Salt: </label>
+		<input id="salt" type="text" name="salt" value="0" />
 		<br/>
-		<label for="price"> Sugar: </label>
-		<input id="sugar" type="text" name="sugar" value="sugar" />
+		<label for="sugar"> Sugar: </label>
+		<input id="sugar" type="text" name="sugar" value="0" />
 		<br/>
 		<br/>
 
 		<!-- the user account that added the food -->
-		<label for="name"> Author: </label>
-		<input id="username" type="text" readonly="true" name="username" value="<%= username %>" />
+		<label for="author"> Author: </label>
+		<input id="author" type="text" readonly="true" name="author" value="<%= username %>" />
 		<br/>
 
 		<input type="submit" value="OK" />

@@ -20,9 +20,34 @@
 	<ul>
 		<% availableFoods.forEach(function(food){ %>
 			<li>
-				<%= food.name %>, £<%= food.price %>
+				<%= food.name %> - £<%= food.price %> (added by: '<%= food.author %>')
+				<ul>
+					<li>
+					per <%= food.typicalValues %> <%= food.typicalValuesUnit %>: 
+					</li>
+					<ul>
+						<li>
+						<%= food.calories %> calories
+						</li>
+						<li>
+						<%= food.carbohydrates %>g carbohydrates
+						</li>
+						<li>
+						<%= food.fat %>g fats
+						</li>
+						<li>
+						<%= food.protein %>g proteins
+						</li>
+						<li>
+						<%= food.salt %>g salts
+						</li>
+						<li>
+						<%= food.sugar %>g sugars
+						</li>
+					</ul>
+				</ul>>
 			</li>
-			<% }) %>
+		<% }) %>
 	</ul>
 </body>
 

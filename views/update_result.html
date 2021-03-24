@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<title>Update_Results</title>
+	<link rel="stylesheet" href="css\style.css">
+	<style>
+		h1 {
+			color: #ce723b;
+		}
+	</style>
+</head>
+
+<body>
+    <%- include('./partials/navBar.ejs') %>
+
+	<h1>Update_Foods</h1>
+	<p>Update an existing food item:</p>
+	<form action="/update-result" method="GET">
+		<input id="search-box" type="text" name="keyword" value="">
+		<input type="submit" value="Search">
+	</form>
+
+	<h1> Results: </h1>
+	<% if (availableFoods.length <= 0) { %>
+		<p> No Results </p>
+	<% } %>
+	<ul>
+		<% availableFoods.forEach(function(food){ %>
+			<li>
+				<form method="POST" action="/foodupdated" id="mainForm">
+					<label for="name"> Food Name: </label>
+					<input id="name" type="text" name="name" value=<%= food.name %> />
+					<br/>
+					<label for="price"> Food Price: </label>
+					<input id="price" type="text" name="price" value=<%= food.price %> />
+					<br/>
+					<br/>
+					<label for="typicalValues"> Typical Values Per: </label>
+					<input id="typicalValues" type="text" name="typicalValues" value=<%= food.typicalValues %> />
+					<br/>
+			
+					<label for="typicalValuesUnit"> Unit of Typical Values: </label>
+					<select form="mainForm" id="typicalValuesUnit" form="typicalValuesUnit" name="typicalValuesUnit" >
+						<% if (food.typicalValuesUnit == "grams") { %>
+							<option value="grams" selected>Gram</option>
+						<% } else { %>
+							<option value="grams">Gram</option>
+						<% } %>
+						<% if (food.typicalValuesUnit == "kilogram") { %>
+							<option value="kilogram", selected>Kilogram</option>
+						<% } else { %>
+							<option value="kilogram">Kilogram</option>
+						<% } %>
+						<% if (food.typicalValuesUnit == "mililitre") { %>
+							<option value="mililitre", selected>Mililitre</option>
+						<% } else { %>
+							<option value="mililitre">Mililitre</option>
+						<% } %>
+						<% if (food.typicalValuesUnit == "litre") { %>
+							<option value="litre", selected>Litre</option>
+						<% } else { %>
+							<option value="litre">Litre</option>
+						<% } %>
+						<% if (food.typicalValuesUnit == "teaspoon") { %>
+							<option value="teaspoon", selected>Teaspoon</option>
+						<% } else { %>
+							<option value="teaspoon">Teaspoon</option>
+						<% } %>
+						<% if (food.typicalValuesUnit == "tablespoon") { %>
+							<option value="tablespoon", selected>Tablespoon</option>
+						<% } else { %>
+							<option value="tablespoon">Tablespoon</option>
+						<% } %>
+						<% if (food.typicalValuesUnit == "cup") { %>
+							<option value="cup", selected>Cup</option>
+						<% } else { %>
+							<option value="cup">Cup</option>
+						<% } %>
+					</select>
+					
+					<br/>
+					<label for="calories"> Calories: </label>
+					<input id="calories" type="text" name="calories" value=<%= food.calories %> />
+					<br/>
+					<label for="carbohydrates"> Carbohydrates: </label>
+					<input id="carbohydrates" type="text" name="carbohydrates" value=<%= food.carbohydrates %> />
+					<br/>
+					<label for="fat"> Fat: </label>
+					<input id="fat" type="text" name="fat" value=<%= food.fat %> />
+					<br/>
+					<label for="protein"> Protein: </label>
+					<input id="protein" type="text" name="protein" value=<%= food.protein %> />
+					<br/>
+					<label for="salt"> Salt: </label>
+					<input id="salt" type="text" name="salt" value=<%= food.salt %> />
+					<br/>
+					<label for="sugar"> Sugar: </label>
+					<input id="sugar" type="text" name="sugar" value=<%= food.sugar %> />
+					<br/>
+					<br/>
+
+					<!-- the user account that updated the food -->
+					<label for="author"> Author: </label>
+					<input id="author" type="text" readonly="true" name="author" value="<%= food.author %>" />
+					<br/>
+			
+					<% if (username == food.author) { %>
+						<input type="submit" value="Update"  />
+					<% } else { %>
+						<input type="submit" value="Update" disabled="true" />
+					<% } %>
+					<br/>
+					<br/>
+					<br/>
+				</form>
+			</li>
+		<% }) %>
+	</ul>
+
+	
+</body>
+
+</html>

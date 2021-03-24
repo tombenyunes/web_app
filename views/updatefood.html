@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-	<title>Search</title>
+	<title>Update</title>
 	<link rel="stylesheet" href="css\style.css">
 	<style>
 		h1 {
@@ -14,9 +14,9 @@
 <body>
     <%- include('./partials/navBar.ejs') %>
 
-	<h1>Search_Foods</h1>
-	<p>Search for foods below:</p>
-	<form action="/search-result" method="GET">
+	<h1>Update_Foods</h1>
+	<p>Update an existing food item:</p>
+	<form action="/update-result" method="GET">
 		<input id="search-box" type="text" name="keyword" value="">
 		<input type="submit" value="Search">
 	</form>
