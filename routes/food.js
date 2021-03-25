@@ -62,37 +62,55 @@ module.exports = function (app)
     });
 
     app.post('/foodupdated', function (req, res) {
-        var MongoClient = require('mongodb').MongoClient;
-        var url = process.env.DATABASE_PATH;
+        if (!req.body.delete) {
+            var MongoClient = require('mongodb').MongoClient;
+            var url = process.env.DATABASE_PATH;
 
-        MongoClient.connect(url, function (err, client) {
-            if (err) throw err;
-            var db = client.db(process.env.DATABASE_NAME);
+            MongoClient.connect(url, function (err, client) {
+                if (err) throw err;
+                var db = client.db(process.env.DATABASE_NAME);
 
-            db.collection(process.env.COLLECTION_FOODS).findOneAndUpdate({
-                name: req.body.name
-            },
-            {
-                $set: 
+                db.collection(process.env.COLLECTION_FOODS).findOneAndUpdate({
+                    name: req.body.name
+                },
                 {
-                    name: req.body.name,
-                    price: req.body.price,
-                    typicalValues: req.body.typicalValues,
-                    typicalValuesUnit: req.body.typicalValuesUnit,
-                    calories: req.body.calories,
-                    carbohydrates: req.body.carbohydrates,
-                    fat: req.body.fat,
-                    protein: req.body.protein,
-                    salt: req.body.salt,
-                    sugar: req.body.sugar
-                }
+                    $set: 
+                    {
+                        name: req.body.name,
+                        price: req.body.price,
+                        typicalValues: req.body.typicalValues,
+                        typicalValuesUnit: req.body.typicalValuesUnit,
+                        calories: req.body.calories,
+                        carbohydrates: req.body.carbohydrates,
+                        fat: req.body.fat,
+                        protein: req.body.protein,
+                        salt: req.body.salt,
+                        sugar: req.body.sugar
+                    }
+                });
+                client.close();
+                let title = 'Food Updated';
+                let message = '"' + req.body.name + '" has been updated.'; // success message
+                res.render('templates/messageTemplate.html', { title: title, message: message, multipleMessages: false, color: '#6a9955' });
             });
-            client.close();
-            let title = 'Food Updated';
-            let message = '"' + req.body.name + '" has been updated.'; // success message
-            // let message = 'Food added: ' + req.body.name + " " + req.body.price + " " + req.body.typicalValues + " " + req.body.typicalValuesUnit + " " + req.body.calories + " " + req.body.carbohydrates + " " + req.body.fat + " " + req.body.protein + " " + req.body.salt + " " + req.body.sugar + " " + req.body.author;
-            res.render('templates/messageTemplate.html', { title: title, message: message, multipleMessages: false, color: '#6a9955' });
-        });
+        }
+        else {
+            var MongoClient = require('mongodb').MongoClient;
+            var url = process.env.DATABASE_PATH;
+
+            MongoClient.connect(url, function (err, client) {
+                if (err) throw err;
+                var db = client.db(process.env.DATABASE_NAME);
+
+                db.collection(process.env.COLLECTION_FOODS).findOneAndDelete({
+                    name: req.body.name
+                });
+                client.close();
+                let title = 'Food Deleted';
+                let message = '"' + req.body.name + '" has been deleted.';
+                res.render('templates/messageTemplate.html', { title: title, message: message, multipleMessages: false, color: '#6a9955' });
+            });
+        }
     });
 
 	app.get('/listfoods', utils.redirectLogin, function (req, res)
