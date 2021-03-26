@@ -24,39 +24,36 @@
 	<h1> Results: </h1>
 	<% if (availableFoods.length <= 0) { %>
 		<p> No Results </p>
-	<% } %>
-	<ul>
+	<% } else { %>
+	<table style="width: auto">
+		<tr>
+		<th>Name</th>
+		<th>Price</th>
+		<th>Author</th>
+		<th>Typical Values Per</th>
+		<th>Calories</th>
+		<th>Carbohydrates</th>
+		<th>Fat</th>
+		<th>Protein</th>
+		<th>Salt</th>
+		<th>Sugar</th>
+		</tr>
 		<% availableFoods.forEach(function(food){ %>
-			<li>
-				<%= food.name %> - £<%= food.price %> (added by: '<%= food.author %>')
-				<ul>
-					<li>
-					per <%= food.typicalValues %> <%= food.typicalValuesUnit %>: 
-					</li>
-					<ul>
-						<li>
-						<%= food.calories %> calories
-						</li>
-						<li>
-						<%= food.carbohydrates %>g carbohydrates
-						</li>
-						<li>
-						<%= food.fat %>g fats
-						</li>
-						<li>
-						<%= food.protein %>g proteins
-						</li>
-						<li>
-						<%= food.salt %>g salts
-						</li>
-						<li>
-						<%= food.sugar %>g sugars
-						</li>
-					</ul>
-				</ul>>
-			</li>
+			<tr>
+				<td><%= food.name %></td>
+				<td>£<%= food.price %></td>
+				<td><%= food.author %></td>
+				<td><%= food.typicalValues %> <%= food.typicalValuesUnit %></td>
+				<td><%= food.calories %></td>
+				<td><%= food.carbohydrates %>g</td>
+				<td><%= food.fat %>g</td>
+				<td><%= food.protein %>g</td>
+				<td><%= food.salt %>g</td>
+				<td><%= food.sugar %>g</td>
+			</tr>
 		<% }) %>
-	</ul>
+	</table>
+	<% } %>
 </body>
 
 </html>

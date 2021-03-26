@@ -1,7 +1,7 @@
 module.exports = function (app)
 {
     const utils = require('../lib/utils.js');
-    const { userValidation } = require('../lib/checks');
+    const { foodValidation } = require('../lib/validationChecks');
     const { validationResult } = require('express-validator/src/validation-result');
 
     // form to collect food name and price
@@ -10,32 +10,42 @@ module.exports = function (app)
     });
 
     // add food to database
-    app.post('/foodadded', function (req, res) {
-        var MongoClient = require('mongodb').MongoClient;
-        var url = process.env.DATABASE_PATH;
+    app.post('/foodadded', foodValidation, function (req, res)
+    {        
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) { // if validation fails, redirect to addfood page
+            res.redirect('./addfood');
+        }
+        else {
+            var MongoClient = require('mongodb').MongoClient;
+            var url = process.env.DATABASE_PATH;
+            var id = Math.random() * 10000000000000000; // random id
+            id = '"' + id + '"';
 
-        MongoClient.connect(url, function (err, client) {
-            if (err) throw err;
-            var db = client.db(process.env.DATABASE_NAME);
-            db.collection(process.env.COLLECTION_FOODS).insertOne({ // insert food name and price into database
-                name: req.body.name,
-                price: req.body.price,
-                typicalValues: req.body.typicalValues,
-                typicalValuesUnit: req.body.typicalValuesUnit,
-                calories: req.body.calories,
-                carbohydrates: req.body.carbohydrates,
-                fat: req.body.fat,
-                protein: req.body.protein,
-                salt: req.body.salt,
-                sugar: req.body.sugar,
-                author: req.body.author
+            MongoClient.connect(url, function (err, client) {
+                if (err) throw err;
+                var db = client.db(process.env.DATABASE_NAME);
+                db.collection(process.env.COLLECTION_FOODS).insertOne({ // insert food name and price into database
+                    id: id,
+                    name: req.body.name,
+                    price: req.body.price,
+                    typicalValues: req.body.typicalValues,
+                    typicalValuesUnit: req.body.typicalValuesUnit,
+                    calories: req.body.calories,
+                    carbohydrates: req.body.carbohydrates,
+                    fat: req.body.fat,
+                    protein: req.body.protein,
+                    salt: req.body.salt,
+                    sugar: req.body.sugar,
+                    author: req.body.author
+                });
+                client.close();
+                let title = 'Food Added';            
+                let message = '"' + req.body.name + '" has been added to the database.'; // success message
+                // let message = 'Food added: ' + req.body.name + " " + req.body.price + " " + req.body.typicalValues + " " + req.body.typicalValuesUnit + " " + req.body.calories + " " + req.body.carbohydrates + " " + req.body.fat + " " + req.body.protein + " " + req.body.salt + " " + req.body.sugar + " " + req.body.author;
+                res.render('templates/messageTemplate.html', { title: title, message: message, multipleMessages: false, color: '#6a9955' });
             });
-            client.close();
-            let title = 'Food Added';            
-            let message = '"' + req.body.name + '" has been added to the database.'; // success message
-            // let message = 'Food added: ' + req.body.name + " " + req.body.price + " " + req.body.typicalValues + " " + req.body.typicalValuesUnit + " " + req.body.calories + " " + req.body.carbohydrates + " " + req.body.fat + " " + req.body.protein + " " + req.body.salt + " " + req.body.sugar + " " + req.body.author;
-            res.render('templates/messageTemplate.html', { title: title, message: message, multipleMessages: false, color: '#6a9955' });
-        });
+        }
     });
 
     app.get('/updatefood', utils.redirectLogin, function (req, res) {
@@ -69,9 +79,8 @@ module.exports = function (app)
             MongoClient.connect(url, function (err, client) {
                 if (err) throw err;
                 var db = client.db(process.env.DATABASE_NAME);
-
                 db.collection(process.env.COLLECTION_FOODS).findOneAndUpdate({
-                    name: req.body.name
+                    id: req.body.id
                 },
                 {
                     $set: 
@@ -95,6 +104,15 @@ module.exports = function (app)
             });
         }
         else {
+            res.render('deletefood.html', { name: req.body.name, id: req.body.id });            
+        }
+    });
+
+    app.post('/fooddeleted', function (req, res) {
+        if (!req.body.yes) {
+            res.redirect('./updatefood');
+        }
+        else {
             var MongoClient = require('mongodb').MongoClient;
             var url = process.env.DATABASE_PATH;
 
@@ -103,15 +121,16 @@ module.exports = function (app)
                 var db = client.db(process.env.DATABASE_NAME);
 
                 db.collection(process.env.COLLECTION_FOODS).findOneAndDelete({
-                    name: req.body.name
+                    id: req.body.id
                 });
-                client.close();
-                let title = 'Food Deleted';
-                let message = '"' + req.body.name + '" has been deleted.';
-                res.render('templates/messageTemplate.html', { title: title, message: message, multipleMessages: false, color: '#6a9955' });
+                client.close();                                
             });
+
+            let title = 'Food Deleted';
+            let message = '"' + req.body.name + '" has been deleted.';
+            res.render('templates/messageTemplate.html', { title: title, message: message, multipleMessages: false, color: '#6a9955' });
         }
-    });
+    })
 
 	app.get('/listfoods', utils.redirectLogin, function (req, res)
 	{

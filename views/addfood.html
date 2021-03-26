@@ -25,10 +25,7 @@
 		<input id="price" type="text" name="price" value="0" />
 		<br/>
 		<br/>
-		<label for="typicalValues"> Typical Values Per: </label>
-		<input id="typicalValues" type="text" name="typicalValues" value="0" />
-		<br/>
-
+		
 		<label for="typicalValuesUnit"> Unit of Typical Values: </label>
 		<select form="mainForm" id="typicalValuesUnit" form="typicalValuesUnit" name="typicalValuesUnit">
 			<option value="grams">Gram</option>
@@ -39,7 +36,11 @@
 			<option value="tablespoon">Tablespoon</option>
 			<option value="cup">Cup</option>
 		</select>
+		<br/>
+		<label for="typicalValues"> Quantity of Typical Values: </label>
+		<input id="typicalValues" type="text" name="typicalValues" value="0" />		
 		
+		<br/>
 		<br/>
 		<label for="calories"> Calories: </label>
 		<input id="calories" type="text" name="calories" value="0" />
@@ -63,7 +64,7 @@
 
 		<!-- the user account that added the food -->
 		<label for="author"> Author: </label>
-		<input id="author" type="text" readonly="true" name="author" value="<%= username %>" />
+		<input id="author" type="text" name="author" value="<%= username %>" readonly />
 		<br/>
 
 		<input type="submit" value="OK" />

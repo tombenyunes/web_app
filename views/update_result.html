@@ -27,7 +27,7 @@
 	<% } %>
 	<ul>
 		<% availableFoods.forEach(function(food){ %>
-			<li>				
+			<li>
 				<form method="POST" action="/foodupdated" id="mainForm">
 					<label for="name"> Food Name: </label>
 					<input id="name" type="text" name="name" value=<%= food.name %> />
@@ -103,7 +103,8 @@
 					<!-- the user account that updated the food -->
 					<label for="author"> Author: </label>
 					<input id="author" type="text" readonly="true" name="author" value="<%= food.author %>" />
-					<br/>
+					<input id="id" type="text" readonly="true" name="id" value="<%= food.id %>" hidden />
+					<br/><br/>
 			
 					<% if (username == food.author) { %>
 						<input id="update" name="update" type="submit" value="Update"/>
@@ -112,19 +113,8 @@
 						<input id="update" name="update" type="submit" value="Update" disabled="true" />
 						<input id="delete" name="delete" type="submit" value="Delete" disabled="true" />
 					<% } %>
-					<br/>
-					<br/>
-					<br/>
+					<br/><br/><br/>
 				</form>
-				
-				<!-- <form method="POST" action="/fooddeleted" id="deleteForm"></form>
-					<% if (username == food.author) { %>
-						<input type="delete" value="Update" form="deleteForm"/>
-
-					<% } else { %>
-						<input type="delete" value="Delete" form="deleteForm" disabled="true" />
-					<% } %>
-				</form> -->
 			</li>
 		<% }) %>
 	</ul>

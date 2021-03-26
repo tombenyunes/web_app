@@ -1,7 +1,7 @@
 module.exports = function (app)
 {
     const utils = require('../lib/utils.js');
-    const { userValidation } = require('../lib/checks');
+    const { userValidation } = require('../lib/validationChecks');
     const { validationResult } = require('express-validator/src/validation-result');
 
     // form to collect name, username, email, password

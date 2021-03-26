@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<title>Are you sure?</title>
+	<link rel="stylesheet" href="css\style.css">
+	<style>
+		h1 {
+			color: #6a9955;
+		}
+	</style>
+</head>
+
+<body>
+    <%- include('./partials/navBar.ejs') %>
+
+	<h1>Confirmation</h1>
+	<p>Are you sure you want to delete <%=name%>?</p>
+
+	<form method="POST" action="/fooddeleted">
+		<input id="id"  name="id"  type="hidden" value=<%=id%>>
+		<input id="name"  name="name"  type="hidden" value=<%=name%>>
+		<input id="yes" name="yes" type="submit" value="Yes">
+		<input id="no"  name="no"  type="submit" value="No">
+	</form>
+
+</body>
+
+</html>
