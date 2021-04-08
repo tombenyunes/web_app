@@ -41,7 +41,7 @@
 					<br/>
 			
 					<label for="typicalValuesUnit"> Unit of Typical Values: </label>
-					<select form="mainForm" id="typicalValuesUnit" form="typicalValuesUnit" name="typicalValuesUnit" >
+					<!-- <select form="mainForm" id="typicalValuesUnit" form="typicalValuesUnit" name="typicalValuesUnit" >
 						<% if (food.typicalValuesUnit == "grams") { %>
 							<option value="grams" selected>Gram</option>
 						<% } else { %>
@@ -77,7 +77,8 @@
 						<% } else { %>
 							<option value="cup">Cup</option>
 						<% } %>
-					</select>
+					</select> -->
+					<input id="typicalValuesUnit" type="text" name="typicalValuesUnit" value=<%= food.typicalValuesUnit %> />
 					
 					<br/>
 					<label for="calories"> Calories: </label>
@@ -103,7 +104,7 @@
 					<!-- the user account that updated the food -->
 					<label for="author"> Author: </label>
 					<input id="author" type="text" readonly="true" name="author" value="<%= food.author %>" />
-					<input id="id" type="text" readonly="true" name="id" value="<%= food.id %>" hidden />
+					<input id="_id" type="text" readonly="true" name="_id" value="<%= food._id %>" hidden />
 					<br/><br/>
 			
 					<% if (username == food.author) { %>

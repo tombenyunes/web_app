@@ -1,64 +1,82 @@
 module.exports = function (app)
-{    
-	app.get('/api', function (req, res)
+{
+    const { foodValidation } = require('../lib/validationChecks');
+    const { validationResult } = require('express-validator/src/validation-result');
+
+	app.get('/api/', function (req, res)
 	{
-		var MongoClient = require('mongodb').MongoClient;
-		var url = process.env.DATABASE_PATH;
-		MongoClient.connect(url, function (err, client) {
-			if (err) throw err
-			var db = client.db(process.env.DATABASE_NAME);
-			db.collection(process.env.COLLECTION_FOODS).find().toArray((err, results) => {
-				if (err) throw err;
-				else res.json(results);
-				client.close();
-			});
-    	});
-	});
-
-    app.post('/api', function (req, res)
-	{        
         var MongoClient = require('mongodb').MongoClient;
         var url = process.env.DATABASE_PATH;
-        var id = Math.random() * 10000000000000000; // random id
-        id = '"' + id + '"';
-
         MongoClient.connect(url, function (err, client) {
-            if (err) throw err;
+            if (err) throw err
             var db = client.db(process.env.DATABASE_NAME);
-            db.collection(process.env.COLLECTION_FOODS).insertOne({ // insert food name and price into database
-                id: id,
-                name: req.body.name,
-                price: req.body.price,
-                typicalValues: req.body.typicalValues,
-                typicalValuesUnit: req.body.typicalValuesUnit,
-                calories: req.body.calories,
-                carbohydrates: req.body.carbohydrates,
-                fat: req.body.fat,
-                protein: req.body.protein,
-                salt: req.body.salt,
-                sugar: req.body.sugar,
-                author: req.body.author
+
+            db.collection(process.env.COLLECTION_FOODS).find().toArray((err, results) => {
+                if (err) throw err;
+                else res.status(200).json(results);
+                client.close();
             });
-            client.close();
         });
-
-        res.send('Food Added Successfully');
 	});
-    
-    app.put('/api', function (req, res) 
-    {
-        var MongoClient = require('mongodb').MongoClient;
-        var url = process.env.DATABASE_PATH;
-        console.log(req.body);
-        MongoClient.connect(url, function (err, client) {
-            if (err) throw err;
-            var db = client.db(process.env.DATABASE_NAME);
-            db.collection(process.env.COLLECTION_FOODS).findOneAndUpdate({
-                id: req.body.id
-            },
-            {
-                $set: 
-                {
+    app.get('/api/:foodId', function (req, res)
+	{
+        if (req.params.foodId.length != 24) {
+            res.status(400).send('BAD REQUEST: ID length must be 24 characters exactly!');
+        }
+        else {
+            var MongoClient = require('mongodb').MongoClient;
+            var url = process.env.DATABASE_PATH;
+            MongoClient.connect(url, function (err, client) {
+                if (err) throw err
+                var db = client.db(process.env.DATABASE_NAME);
+
+                const objectID = require('mongodb').ObjectID;
+                const id = new objectID(req.params.foodId);
+
+                db.collection(process.env.COLLECTION_FOODS).find({
+                    _id: id
+                }).toArray((err, results) => {
+                    if (err) throw err;
+                    else {
+                        if (results.length == 0) {
+                            res.status(404).json("NOT FOUND");
+                        } else {
+                            res.status(200).json(results);
+                        }
+                    }
+                    client.close();
+                });
+            });
+        }
+	});
+
+    app.post('/api', foodValidation, function (req, res)
+	{
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            let errMsg = "";
+            for (i = 0; i < errors.errors.length; i++) {
+                errMsg += errors.errors[i].param + ": " + errors.errors[i].msg;
+                if (i < errors.errors.length - 1) {
+                    errMsg += ", ";
+                } else {
+                    errMsg += ".";
+                }
+            }
+            res.status(400).send('BAD REQUEST: ' + errMsg);
+        }
+        else if (!req.body.author) {
+            res.status(400).send('BAD REQUEST: ' + 'Author Must be Defined');
+        }
+        else {
+            var MongoClient = require('mongodb').MongoClient;
+            var url = process.env.DATABASE_PATH;
+
+            MongoClient.connect(url, function (err, client) {
+                if (err) throw err;
+                var db = client.db(process.env.DATABASE_NAME);
+
+                db.collection(process.env.COLLECTION_FOODS).insertOne({
                     name: req.body.name,
                     price: req.body.price,
                     typicalValues: req.body.typicalValues,
@@ -68,30 +86,105 @@ module.exports = function (app)
                     fat: req.body.fat,
                     protein: req.body.protein,
                     salt: req.body.salt,
-                    sugar: req.body.sugar
-                }
-            });
-            client.close();
-        });
+                    sugar: req.body.sugar,
+                    author: req.body.author
+                });
+                client.close();
 
-        res.send('Food Updated Successfully');
+                res.status(201).send('CREATED: Food Added Successfully');
+            });
+        }
+	});
+    
+    app.put('/api/:foodId*?', foodValidation, function (req, res)
+    {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            let errMsg = "";
+            for (i = 0; i < errors.errors.length; i++) {
+                errMsg += errors.errors[i].param + ": " + errors.errors[i].msg;
+                if (i < errors.errors.length - 1) {
+                    errMsg += ", ";
+                } else {
+                    errMsg += ".";
+                }
+            }
+            res.status(400).send('BAD REQUEST: ' + errMsg);
+        }
+        else if (!req.params.foodId) {
+            res.status(400).send('BAD REQUEST: No ID Specified');
+        }
+        else if (req.params.foodId.length != 24) {
+            res.status(400).send('BAD REQUEST: ID length must be 24 characters exactly!');
+        }
+        else {
+            var MongoClient = require('mongodb').MongoClient;
+            var url = process.env.DATABASE_PATH;
+            MongoClient.connect(url, function (err, client) {
+                if (err) throw err;
+                var db = client.db(process.env.DATABASE_NAME);
+
+                const objectID = require('mongodb').ObjectID;
+                const id = new objectID(req.params.foodId);
+
+                db.collection(process.env.COLLECTION_FOODS).findOneAndUpdate({
+                    _id: id
+                },
+                {
+                    $set:
+                    {
+                        name: req.body.name,
+                        price: req.body.price,
+                        typicalValues: req.body.typicalValues,
+                        typicalValuesUnit: req.body.typicalValuesUnit,
+                        calories: req.body.calories,
+                        carbohydrates: req.body.carbohydrates,
+                        fat: req.body.fat,
+                        protein: req.body.protein,
+                        salt: req.body.salt,
+                        sugar: req.body.sugar
+                    }
+                },
+                function (err, results) {
+                    if (err) throw err;
+                    else {
+                        if (!results.value) {
+                            res.status(404).send("NOT FOUND");
+                        } else {
+                            res.status(200).send('UPDATED: Food (id: ' + req.params.foodId + ') Updated Successfully');
+                        }
+                    }
+                });                
+                client.close();
+            });            
+        }
     });
 
-    app.delete('/api', function (req, res)
+    app.delete('/api/:foodId*?', function (req, res)
     {
-        var MongoClient = require('mongodb').MongoClient;
-        var url = process.env.DATABASE_PATH;
+        if (!req.params.foodId) {
+            res.status(400).send('BAD REQUEST: No ID Specified');
+        }
+        else if (req.params.foodId.length != 24) {
+            res.status(400).send('BAD REQUEST: ID length must be 24 characters exactly!');
+        }
+        else {
+            var MongoClient = require('mongodb').MongoClient;
+            var url = process.env.DATABASE_PATH;
+            MongoClient.connect(url, function (err, client) {
+                if (err) throw err;
+                var db = client.db(process.env.DATABASE_NAME);
 
-        MongoClient.connect(url, function (err, client) {
-            if (err) throw err;
-            var db = client.db(process.env.DATABASE_NAME);
+                const objectID = require('mongodb').ObjectID;
+                const id = new objectID(req.params.foodId);
 
-            db.collection(process.env.COLLECTION_FOODS).findOneAndDelete({
-                id: req.body.id
+                db.collection(process.env.COLLECTION_FOODS).findOneAndDelete({
+                    _id: id
+                });
+                client.close();
             });
-            client.close();
-        });
 
-        res.send('Food Deleted Successfully');
+            res.status(200).send('DELETED: Food (id: ' + req.params.foodId + ') Deleted Successfully');
+        }
     });
 }

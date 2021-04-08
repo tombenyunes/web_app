@@ -21,33 +21,77 @@
 		<p> No Results </p>
 	<% } else { %>
 		<table style="width: auto">
-			<tr>
-			<th>Name</th>
-			<th>Price</th>
-			<th>Author</th>
-			<th>Typical Values Per</th>
-			<th>Calories</th>
-			<th>Carbohydrates</th>
-			<th>Fat</th>
-			<th>Protein</th>
-			<th>Salt</th>
-			<th>Sugar</th>
+			<tr>			
+				<th>Name</th>
+				<th>Price</th>
+				<th>Author</th>
+				<th>Typical Values Per</th>
+				<th>Calories</th>
+				<th>Carbohydrates</th>
+				<th>Fat</th>
+				<th>Protein</th>
+				<th>Salt</th>
+				<th>Sugar</th>
+				<th>(Add Foods to Combine Values)</th>
 			</tr>
 			<% availableFoods.forEach(function(food){ %>
 				<tr>
-					<td><%= food.name %></td>
-					<td>£<%= food.price %></td>
-					<td><%= food.author %></td>
-					<td><%= food.typicalValues %> <%= food.typicalValuesUnit %></td>
-					<td><%= food.calories %></td>
-					<td><%= food.carbohydrates %>g</td>
-					<td><%= food.fat %>g</td>
-					<td><%= food.protein %>g</td>
-					<td><%= food.salt %>g</td>
-					<td><%= food.sugar %>g</td>
+					<form method="POST", action="/listfoods">
+						<td><%= food.name %></td>
+						<td>£<%= food.price %></td>
+						<td><%= food.author %></td>
+						<td><%= food.typicalValues %> <%= food.typicalValuesUnit %></td>
+						<td><%= food.calories %></td>
+						<td><%= food.carbohydrates %></td>
+						<td><%= food.fat %></td>
+						<td><%= food.protein %></td>
+						<td><%= food.salt %></td>
+						<td><%= food.sugar %></td>
+
+						<td><input type="text" name="amount" value=<%= food.typicalValues %>>
+							<input type="submit" value="Add Food">
+						</td>
+
+						<input type="hidden" value=<%= food.typicalValues %> name="typicalValues">
+
+						<input type="hidden" value=<%= food.calories %> name="caloriesToAdd">
+						<input type="hidden" value=<%= food.carbohydrates %> name="carbohydratesToAdd">
+						<input type="hidden" value=<%= food.fat %> name="fatToAdd">
+						<input type="hidden" value=<%= food.protein %> name="proteinToAdd">
+						<input type="hidden" value=<%= food.salt %> name="saltToAdd">
+						<input type="hidden" value=<%= food.sugar %> name="sugarToAdd">
+
+						<input type="hidden" value=<%= combinedCalories %> name="combinedCalories">
+						<input type="hidden" value=<%= combinedCarbohydrates %> name="combinedCarbohydrates">
+						<input type="hidden" value=<%= combinedFat %> name="combinedFat">
+						<input type="hidden" value=<%= combinedProtein %> name="combinedProtein">
+						<input type="hidden" value=<%= combinedSalt %> name="combinedSalt">
+						<input type="hidden" value=<%= combinedSugar %> name="combinedSugar">
+					</form>
 				</tr>
 			<% }) %>
 		</table>
+		<% if (combinedFoods != 0) { %>
+			<h1>Results</h1>
+			<table style="width: auto">
+				<tr>
+					<th>Combined Calories</th>
+					<th>Combined Carbohydrates</th>
+					<th>Combined Fat</th>
+					<th>Combined Protein</th>
+					<th>Combined Salt</th>
+					<th>Combined Sugar</th>
+				</tr>
+				<tr>
+					<td><%= combinedCalories.toFixed(2) %></td>
+					<td><%= combinedCarbohydrates.toFixed(2) %></td>
+					<td><%= combinedFat.toFixed(2) %></td>
+					<td><%= combinedProtein.toFixed(2) %></td>
+					<td><%= combinedSalt.toFixed(2) %></td>
+					<td><%= combinedSugar.toFixed(2) %></td>
+				</tr>
+			</table>
+		<% } %>
 	<% } %>
 </body>
 

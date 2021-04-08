@@ -16,16 +16,31 @@
 
 	<h1>User_List</h1>
 	<p>All existing users are listed below:</p>
-
-	<ul>
-		<% users.forEach(function(user){ %>
-			<li>First Name: "<%= user.first %>",
-					Last Name: "<%= user.last %>",
-						Username: "<%= user.username %>",
-							Email: "<%= user.email %>",
-								Admin: <%=user.admin %>. </li>
+	
+	<% if (users.length <= 0) { %>
+		<p> No Results </p>
+	<% } else { %>
+		<table style="width: auto">
+			<tr>			
+				<th>First Name</th>
+				<th>Last Name</th>
+				<th>Username</th>
+				<th>Email</th>
+				<th>Admin</th>
+			</tr>
+			<% users.forEach(function(user){ %>
+				<tr>
+					<form method="POST", action="/listfoods">
+						<td><%= user.first %></td>
+						<td><%= user.last %></td>
+						<td><%= user.username %></td>
+						<td><%= user.email %></td>
+						<td><%= user.admin %></td>
+					</form>
+				</tr>
 			<% }) %>
-	</ul>
+		</table>
+	<% } %>
 </body>
 
 </html>

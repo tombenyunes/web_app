@@ -19,14 +19,14 @@ module.exports = function (app)
         else {
             var MongoClient = require('mongodb').MongoClient;
             var url = process.env.DATABASE_PATH;
-            var id = Math.random() * 10000000000000000; // random id
-            id = '"' + id + '"';
+            // var id = Math.random() * 10000000000000000; // random id
+            // id = '"' + id + '"';
 
             MongoClient.connect(url, function (err, client) {
                 if (err) throw err;
                 var db = client.db(process.env.DATABASE_NAME);
                 db.collection(process.env.COLLECTION_FOODS).insertOne({ // insert food name and price into database
-                    id: id,
+                    // id: id,
                     name: req.body.name,
                     price: req.body.price,
                     typicalValues: req.body.typicalValues,
@@ -62,7 +62,7 @@ module.exports = function (app)
             db.collection(process.env.COLLECTION_FOODS).find({ name: { $regex: req.query.keyword, $options: 'i'  } }).toArray(function (err, result) // find all foods that contain characters from the search query (non-case sensitive)
             {
                 if (err) {
-                    res.redirect('./search'); // redirect upon error
+                    res.redirect('./updatefood'); // redirect upon error
                 } else {
                     res.render('update_result.html', { availableFoods: result, username: req.session.userId }); // display all foods that match query
                 }
@@ -71,40 +71,50 @@ module.exports = function (app)
         });
     });
 
-    app.post('/foodupdated', function (req, res) {
-        if (!req.body.delete) {
-            var MongoClient = require('mongodb').MongoClient;
-            var url = process.env.DATABASE_PATH;
-
-            MongoClient.connect(url, function (err, client) {
-                if (err) throw err;
-                var db = client.db(process.env.DATABASE_NAME);
-                db.collection(process.env.COLLECTION_FOODS).findOneAndUpdate({
-                    id: req.body.id
-                },
-                {
-                    $set: 
-                    {
-                        name: req.body.name,
-                        price: req.body.price,
-                        typicalValues: req.body.typicalValues,
-                        typicalValuesUnit: req.body.typicalValuesUnit,
-                        calories: req.body.calories,
-                        carbohydrates: req.body.carbohydrates,
-                        fat: req.body.fat,
-                        protein: req.body.protein,
-                        salt: req.body.salt,
-                        sugar: req.body.sugar
-                    }
-                });
-                client.close();
-                let title = 'Food Updated';
-                let message = '"' + req.body.name + '" has been updated.'; // success message
-                res.render('templates/messageTemplate.html', { title: title, message: message, multipleMessages: false, color: '#6a9955' });
-            });
+    app.post('/foodupdated', foodValidation, function (req, res) {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) { // if validation fails, redirect to addfood page
+            res.redirect('./update-result');
         }
         else {
-            res.render('deletefood.html', { name: req.body.name, id: req.body.id });            
+            if (!req.body.delete) {
+                var MongoClient = require('mongodb').MongoClient;
+                var url = process.env.DATABASE_PATH;
+
+                MongoClient.connect(url, function (err, client) {
+                    if (err) throw err;
+                    var db = client.db(process.env.DATABASE_NAME);
+
+                    const objectID = require('mongodb').ObjectID;
+                    const id = new objectID(req.body._id);
+
+                    db.collection(process.env.COLLECTION_FOODS).findOneAndUpdate({
+                        _id: id
+                    },
+                    {
+                        $set: 
+                        {
+                            name: req.body.name,
+                            price: req.body.price,
+                            typicalValues: req.body.typicalValues,
+                            typicalValuesUnit: req.body.typicalValuesUnit,
+                            calories: req.body.calories,
+                            carbohydrates: req.body.carbohydrates,
+                            fat: req.body.fat,
+                            protein: req.body.protein,
+                            salt: req.body.salt,
+                            sugar: req.body.sugar
+                        }
+                    });
+                    client.close();
+                    let title = 'Food Updated';
+                    let message = '"' + req.body.name + '" has been updated.'; // success message
+                    res.render('templates/messageTemplate.html', { title: title, message: message, multipleMessages: false, color: '#6a9955' });
+                });
+            }
+            else {
+                res.render('deletefood.html', { name: req.body.name, _id: req.body._id });
+            }
         }
     });
 
@@ -120,8 +130,11 @@ module.exports = function (app)
                 if (err) throw err;
                 var db = client.db(process.env.DATABASE_NAME);
 
+                const objectID = require('mongodb').ObjectID;
+                const id = new objectID(req.body._id);
+
                 db.collection(process.env.COLLECTION_FOODS).findOneAndDelete({
-                    id: req.body.id
+                    _id: id
                 });
                 client.close();                                
             });
@@ -143,7 +156,54 @@ module.exports = function (app)
 			db.collection(process.env.COLLECTION_FOODS).find().toArray((findErr, results) => // find all foods
 			{
 				if (findErr) throw findErr;
-				else res.render('listfoods.html', {availableFoods: results}); // display list
+				else res.render('listfoods.html', { availableFoods: results,
+                                                    combinedFoods: 0,
+                                                    combinedCalories: 0,
+                                                    combinedCarbohydrates: 0,
+                                                    combinedFat: 0,
+                                                    combinedProtein: 0,
+                                                    combinedSalt: 0,
+                                                    combinedSugar: 0 });
+				client.close();
+			});
+		});
+	});
+    app.post('/listfoods', utils.redirectLogin, function (req, res)
+	{
+        let mult = parseFloat(req.body.amount) / parseFloat(req.body.typicalValues);
+
+        let totalCalories = parseFloat(req.body.caloriesToAdd * mult);
+        let totalCarbohydrates = parseFloat(req.body.carbohydratesToAdd * mult);
+        let totalFat = parseFloat(req.body.fatToAdd * mult);
+        let totalProtein = parseFloat(req.body.proteinToAdd * mult);
+        let totalSalt = parseFloat(req.body.saltToAdd * mult);
+        let totalSugar = parseFloat(req.body.sugarToAdd * mult);
+        
+        if (req.body.combinedCalories > 0) totalCalories += parseFloat(req.body.combinedCalories);
+        if (req.body.combinedCarbohydrates > 0) totalCarbohydrates += parseFloat(req.body.combinedCarbohydrates);
+        if (req.body.combinedFat > 0) totalFat += parseFloat(req.body.combinedFat);
+        if (req.body.combinedProtein > 0) totalProtein += parseFloat(req.body.combinedProtein);
+        if (req.body.combinedSalt > 0) totalSalt += parseFloat(req.body.combinedSalt);
+        if (req.body.combinedSugar > 0) totalSugar += parseFloat(req.body.combinedSugar);
+
+		var MongoClient = require('mongodb').MongoClient;
+		var url = process.env.DATABASE_PATH;
+		MongoClient.connect(url, function (err, client)
+		{
+			if (err) throw err;
+			var db = client.db(process.env.DATABASE_NAME);
+
+			db.collection(process.env.COLLECTION_FOODS).find().toArray((findErr, results) => // find all foods
+			{                
+				if (findErr) throw findErr;
+				else res.render('listfoods.html', { availableFoods: results,
+                                                    combinedFoods: 1,
+                                                    combinedCalories: totalCalories,
+                                                    combinedCarbohydrates: totalCarbohydrates,
+                                                    combinedFat: totalFat,
+                                                    combinedProtein: totalProtein,
+                                                    combinedSalt: totalSalt,
+                                                    combinedSugar: totalSugar });
 				client.close();
 			});
 		});
