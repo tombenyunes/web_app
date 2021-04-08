@@ -72,12 +72,12 @@ module.exports = function (app)
     });
 
     app.post('/foodupdated', foodValidation, function (req, res) {
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) { // if validation fails, redirect to addfood page
-            res.redirect('./update-result');
-        }
-        else {
-            if (!req.body.delete) {
+        const errors = validationResult(req);        
+        if (!req.body.delete) {
+            if (!errors.isEmpty()) { // if validation fails, redirect to addfood page
+                res.redirect('./updatefood'); // redirect upon error
+            }
+            else {
                 var MongoClient = require('mongodb').MongoClient;
                 var url = process.env.DATABASE_PATH;
 
@@ -112,9 +112,9 @@ module.exports = function (app)
                     res.render('templates/messageTemplate.html', { title: title, message: message, multipleMessages: false, color: '#6a9955' });
                 });
             }
-            else {
-                res.render('deletefood.html', { name: req.body.name, _id: req.body._id });
-            }
+        }
+        else {
+            res.render('deletefood.html', { name: req.body.name, _id: req.body._id });
         }
     });
 

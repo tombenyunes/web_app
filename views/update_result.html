@@ -28,7 +28,7 @@
 	<ul>
 		<% availableFoods.forEach(function(food){ %>
 			<li>
-				<form method="POST" action="/foodupdated" id="mainForm">
+				<form method="POST" action="/foodupdated" id="updateFoodForm">
 					<label for="name"> Food Name: </label>
 					<input id="name" type="text" name="name" value=<%= food.name %> />
 					<br/>
@@ -41,7 +41,7 @@
 					<br/>
 			
 					<label for="typicalValuesUnit"> Unit of Typical Values: </label>
-					<!-- <select form="mainForm" id="typicalValuesUnit" form="typicalValuesUnit" name="typicalValuesUnit" >
+					<!-- <select form="updateFoodForm" id="typicalValuesUnit" name="typicalValuesUnit" >
 						<% if (food.typicalValuesUnit == "grams") { %>
 							<option value="grams" selected>Gram</option>
 						<% } else { %>
