@@ -1,0 +1,9 @@
+- I completed all the requirements and extensions in the criteria
+- CSS styling (e.g. customized colours and fonts) (see 'public/css/style.css')
+- Static 'toolbar' at the top of the site, showing all the available pages
+- I separated my routing logic between 'users.js', 'foods.js', 'api.js', 'admin.js', and 'main.js'
+- Validation checks on all forms (see 'lib/validationChecks.js')
+- Admin accounts (created with '/registeradmin' route) that grants control over the user + food mongo collections ('/clearusers' and '/clearfoods' routes). Code for redirecting non-admin and non-logged in users is in 'lib/redirects.js'
+- I defined some constants ('.env') to avoid having to retype mongodb paths and collections
+- I used ejs templating for sections that were reused a lot (e.g. the persistent navigation bar ('views/partials/navBar.ejs') and success/error messages ('views/partials/messageTemplate.html'))
+- Added API support for GET (all or by ID), POST, PUT, and DELETE

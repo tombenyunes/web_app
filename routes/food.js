@@ -1,6 +1,6 @@
 module.exports = function (app)
 {
-    const utils = require('../lib/utils.js');
+    const utils = require('../lib/redirects.js');
     const { foodValidation } = require('../lib/validationChecks');
     const { validationResult } = require('express-validator/src/validation-result');
 

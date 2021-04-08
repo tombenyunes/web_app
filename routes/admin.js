@@ -1,10 +1,10 @@
 module.exports = function (app)
 {
-    const utils = require('../lib/utils.js');
+    const utils = require('../lib/redirects.js');
 
     // admin database management, clear collections
 
-	app.get('/clearusers', utils.redirectAdmin, (req,res) => 
+	app.get('/clearusers', utils.redirectAdmin, (req,res) => 	// clear all users from collection
 	{
 		var MongoClient = require('mongodb').MongoClient;
 		var url = process.env.DATABASE_PATH;
@@ -17,11 +17,11 @@ module.exports = function (app)
 			
 			let title = 'Success';
 			let message = 'All users have been cleared.';
-			res.render('templates/messageTemplate.html', {title: title, message: message, multipleMessages: false, color: '#6a9955'}); // success message
+			res.render('templates/messageTemplate.html', { title: title, message: message, multipleMessages: false, color: '#6a9955' }); // success message
 		});
 	});
 
-	app.get('/clearfoods', utils.redirectAdmin, (req,res) => 
+	app.get('/clearfoods', utils.redirectAdmin, (req,res) => 	// clear all foods from collection
 	{
 		var MongoClient = require('mongodb').MongoClient;
 		var url = process.env.DATABASE_PATH;
@@ -34,7 +34,7 @@ module.exports = function (app)
 			
 			let title = 'Success';
 			let message = 'All foods have been cleared.';
-			res.render('templates/messageTemplate.html', {title: title, message: message, multipleMessages: false, color: '#6a9955'}); // success message
+			res.render('templates/messageTemplate.html', { title: title, message: message, multipleMessages: false, color: '#6a9955' }); // success message
 		});
 	});
 }
