@@ -14,9 +14,24 @@
 <body>
     <%- include('./partials/navBar.ejs') %>
 
-	<h1>About</h1>
-	<p>I completed all the requirements and extensions in the criteria. Additionally, I added css styling to the site, including customized colours and fonts, and a static 'toolbar' showing all the available pages. 
-		<br><br> Tom Benyunes</p>
+	<h1>About</h1>		
+	<p>
+		- I completed all the requirements and extensions in the criteria <br>
+		- CSS styling (e.g. customized colours and fonts) (see 'public/css/style.css') <br>
+		- Static 'toolbar' at the top of the site, showing all the available pages <br>
+		- I separated my routing logic between 'users.js', 'foods.js', 'api.js', 'admin.js', and 'main.js' <br>
+		- Validation checks on all forms (see 'lib/validationChecks.js') <br>
+		- All user accounts must have unique usernames, an error will be receieved if the username is in use <br>
+		- Admin accounts (created with '/registeradmin' route) that grants control over the user + food mongo collections ('/clearusers' and '/clearfoods' routes). Code for redirecting non-admin and non-logged in users is in 'lib/redirects.js' <br>
+		- I defined some constants ('.env') to avoid having to retype mongodb paths and collections <br>
+		- I used ejs templating for sections that were reused a lot (e.g. the persistent navigation bar ('views/partials/navBar.ejs') and success/error messages ('views/partials/messageTemplate.html')) <br>
+		- Food items can only be updated by the user that created the food item <br>
+		- Multiple food items can be selected (by weight) and have their combined nutritional values displayed in a tabular format ('views/listfoods.html')) <br>
+		<br>
+		Tom Benyunes
+		<br><br>
+		<b>(More Information in README.txt)</b>
+	</p>
 </body>
 
 </html>

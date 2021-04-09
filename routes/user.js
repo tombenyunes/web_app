@@ -26,27 +26,37 @@ module.exports = function (app)
             var MongoClient = require('mongodb').MongoClient;
             var url = process.env.DATABASE_PATH;
 
-            const bcrypt = require('bcrypt');
-            const saltRounds = 10; // time needed to calculate hash
-            const plainPassword = req.sanitize(req.body.password); // sanitize password
+            MongoClient.connect(url, function (err, client) {
+                if (err) throw err;
+                var db = client.db(process.env.DATABASE_NAME);
+                db.collection(process.env.COLLECTION_USERS).findOne({ username: req.body.username }, function (err, result) { // check if username occurs in database
+                    if (!result) {
+                        const bcrypt = require('bcrypt');
+                        const saltRounds = 10; // time needed to calculate hash
+                        const plainPassword = req.sanitize(req.body.password); // sanitize password
 
-            bcrypt.hash(plainPassword, saltRounds, function (err, hashedPassword) { // hash password				
-                MongoClient.connect(url, function (err, client) {
-                    if (err) throw err;
-                    var db = client.db(process.env.DATABASE_NAME);
-                    db.collection(process.env.COLLECTION_USERS).insertOne({	// insert user data into database
-                        first: req.body.first,
-                        last: req.body.last,
-                        username: req.body.username,
-                        email: req.body.email,
-                        hashedpassword: hashedPassword,         // hashed password
-                        admin: req.body.admin // admin privileges
-                    });
-                    client.close();
-                    let title = 'Account Created';      // success message
-                    let message = 'Your username is: "' + req.body.username + '", and your email is: "' + req.body.email + '".';
-                    res.render('templates/messageTemplate.html', { title: title, message: message, multipleMessages: false, color: '#6a9955' });
-                });
+                        bcrypt.hash(plainPassword, saltRounds, function (err, hashedPassword) { // hash password
+                            db.collection(process.env.COLLECTION_USERS).insertOne({	// insert user data into database
+                                first: req.body.first,
+                                last: req.body.last,
+                                username: req.body.username,
+                                email: req.body.email,
+                                hashedpassword: hashedPassword,         // hashed password
+                                admin: req.body.admin   // admin privileges
+                            });
+                            client.close();
+                            let title = 'Account Created';      // success message
+                            let message = 'Your username is: "' + req.body.username + '", and your email is: "' + req.body.email + '".';
+                            res.render('templates/messageTemplate.html', { title: title, message: message, multipleMessages: false, color: '#6a9955' });
+                        });
+                    }
+                    else {
+                        client.close();
+                        let title = 'Register Failed!';            // error message
+                        let message = 'Username "' + req.body.username + '" already exists. Please try again.';
+                        res.render('templates/messageTemplate.html', { title: title, message: message, multipleMessages: false, color: '#ce723b' });
+                    }
+                });                
             });
         }
     });

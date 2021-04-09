@@ -3,10 +3,12 @@
 - Static 'toolbar' at the top of the site, showing all the available pages
 - I separated my routing logic between 'users.js', 'foods.js', 'api.js', 'admin.js', and 'main.js'
 - Validation checks on all forms (see 'lib/validationChecks.js')
+- All user accounts must have unique usernames, an error will be receieved if the username is in use
 - Admin accounts (created with '/registeradmin' route) that grants control over the user + food mongo collections ('/clearusers' and '/clearfoods' routes). Code for redirecting non-admin and non-logged in users is in 'lib/redirects.js'
 - I defined some constants ('.env') to avoid having to retype mongodb paths and collections
 - I used ejs templating for sections that were reused a lot (e.g. the persistent navigation bar ('views/partials/navBar.ejs') and success/error messages ('views/partials/messageTemplate.html'))
-- Food items can only be updated by the user that created the food item
+- Food items can only be updated or deleted by the user that created the food item
+- Multiple food items can be selected (by weight) and have their combined nutritional values displayed in a tabular format ('views/listfoods.html'))
 
 - Added API support for GET, POST, PUT, and DELETE
     - Example CURL commands:

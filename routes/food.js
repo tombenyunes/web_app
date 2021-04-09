@@ -74,8 +74,10 @@ module.exports = function (app)
         
         // if update button is clicked
         if (!req.body.delete) {
-            if (!errors.isEmpty()) { // if validation fails, redirect to addfood page
-                res.redirect('./updatefood'); // redirect upon error
+            if (!errors.isEmpty()) { // if validation fails, send error message
+                let title = 'Failed to update food item';
+                let message = 'Invalid values';
+                res.render('templates/messageTemplate.html', { title: title, message: message, multipleMessages: false, color: '#ce723b' });
             }
             else {
                 var MongoClient = require('mongodb').MongoClient;
