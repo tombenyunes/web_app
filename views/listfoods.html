@@ -48,8 +48,10 @@
 						<td><%= food.salt %></td>
 						<td><%= food.sugar %></td>
 
-						<td><input type="text" name="amount" value=<%= food.typicalValues %>>
+						<td>
 							<input type="submit" value="Add Food">
+							<input type="text" name="amount" value=<%= food.typicalValues %>>
+							<%= food.typicalValuesUnit %>
 						</td>
 
 						<input type="hidden" value=<%= food.typicalValues %> name="typicalValues">
