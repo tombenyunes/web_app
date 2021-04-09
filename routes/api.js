@@ -154,7 +154,7 @@ module.exports = function (app)
                             res.status(200).send('UPDATED: Food (id: ' + req.params.foodId + ') Updated Successfully'); // success message
                         }
                     }
-                });                
+                });
                 client.close();
             });            
         }
@@ -180,11 +180,19 @@ module.exports = function (app)
 
                 db.collection(process.env.COLLECTION_FOODS).findOneAndDelete({
                     _id: id                 // find and delete food item that matches specified ID
+                },
+                function (err, results) {
+                    if (err) throw err;
+                    else {
+                        if (!results.value) {
+                            res.status(404).send("NOT FOUND");      // food not found with specified ID
+                        } else {
+                            res.status(200).send('DELETED: Food (id: ' + req.params.foodId + ') Deleted Successfully');     // success message
+                        }
+                    }
                 });
                 client.close();
-            });
-
-            res.status(200).send('DELETED: Food (id: ' + req.params.foodId + ') Deleted Successfully');     // success message
+            });            
         }
     });
 }

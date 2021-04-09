@@ -18,7 +18,7 @@
             curl --location --request POST 'http://www.doc.gold.ac.uk/usr/398/api' \
                 --header 'Content-Type: application/json' \
                 --data-raw '{
-                    "name":"ADDED FOOD",
+                    "name":"ADDED",
                     "price":"1",
                     "typicalValues":"2",
                     "typicalValuesUnit":"grams",
@@ -34,10 +34,10 @@
             curl --location --request PUT 'http://www.doc.gold.ac.uk/usr/398/api/{id}' \
                 --header 'Content-Type: application/json' \
                 --data-raw '{
-                    "name":"UPDATED FOOD",
+                    "name":"UPDATED",
                     "price":"1",
                     "typicalValues":"2",
-                    "typicalValuesUnit":"grams",
+                    "typicalValuesUnit":"kilograms",
                     "calories":"3",
                     "carbohydrates":"4",
                     "fat":"5",
