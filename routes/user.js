@@ -1,5 +1,6 @@
 module.exports = function (app)
 {
+    // validation and utils
     const utils = require('../lib/redirects.js');
     const { userValidation } = require('../lib/validationChecks');
     const { validationResult } = require('express-validator/src/validation-result');
@@ -9,6 +10,7 @@ module.exports = function (app)
         res.render('register.html', { admin: false });
     });
 
+    // register as an admin for more privileges
     app.get('/registeradmin', function (req, res) {
         res.render('register.html', { admin: true });
     });
@@ -37,11 +39,11 @@ module.exports = function (app)
                         last: req.body.last,
                         username: req.body.username,
                         email: req.body.email,
-                        hashedpassword: hashedPassword, // hashed password
-                        admin: req.body.admin // (bool) gives special privileges
+                        hashedpassword: hashedPassword,         // hashed password
+                        admin: req.body.admin // admin privileges
                     });
                     client.close();
-                    let title = 'Account Created';
+                    let title = 'Account Created';      // success message
                     let message = 'Your username is: "' + req.body.username + '", and your email is: "' + req.body.email + '".';
                     res.render('templates/messageTemplate.html', { title: title, message: message, multipleMessages: false, color: '#6a9955' });
                 });
@@ -73,19 +75,20 @@ module.exports = function (app)
                     const plainPassword = req.body.password;
                     const hashedPassword = result.hashedpassword;
                     const isAdmin = result.admin;
+                    
                     bcrypt.compare(plainPassword, hashedPassword, function (err, result) { // if username exists, decrypt hashed password and compare
                         if (result) {
 
-                            req.session.userId = req.body.username;
-                            req.session.isAdmin = isAdmin;
+                            req.session.userId = req.body.username;     // user session
+                            req.session.isAdmin = isAdmin; // grants global admin privileges
 
-                            let title = 'Login Successful!';
-                            let message = 'Login successful for "' + req.body.username + '". You can now access all pages.'; // success message
+                            let title = 'Login Successful!';        // success message
+                            let message = 'Login successful for "' + req.body.username + '". You can now access all pages.';
                             res.render('templates/messageTemplate.html', { title: title, message: message, multipleMessages: false, color: '#6a9955' });
                         }
                         else {
-                            let title = 'Login Failed!';
-                            let message = 'Password incorrect for "' + req.body.username + '". Please try again.'; // error message
+                            let title = 'Login Failed!';            // error message
+                            let message = 'Password incorrect for "' + req.body.username + '". Please try again.';
                             res.render('templates/messageTemplate.html', { title: title, message: message, multipleMessages: false, color: '#ce723b' });
                         }
                     });
@@ -101,8 +104,8 @@ module.exports = function (app)
             if (err) {
                 return res.redirect('./'); // redirect to home page if error occurs
             }
-            let title = 'Logout Successful!';
-            let message = 'You are now logged out. If you want access to all pages, please login'; // success message
+            let title = 'Logout Successful!';           // success message
+            let message = 'You are now logged out. If you want access to all pages, please login';
             res.render('templates/messageTemplate.html', { title: title, message: message, multipleMessages: false, color: '#6a9955' });
         });
     });
@@ -123,7 +126,7 @@ module.exports = function (app)
             db.collection(process.env.COLLECTION_USERS).findOne({ username: req.body.username }, function (err, result) { // check if username occurs in database
                 if (err) throw err;
                 if (!result) {
-                    let title = 'Error';
+                    let title = 'Error';        // error message
                     let message = 'Username "' + req.body.username + '" does not exist.';
                     res.render('templates/messageTemplate.html', { title: title, message: message, multipleMessages: false, color: '#ce723b' }); // error message
                 }
@@ -131,7 +134,7 @@ module.exports = function (app)
                     db.collection(process.env.COLLECTION_USERS).deleteOne({ 'username': req.body.username }, function (err, result) { // delete necessary account
                         if (err) throw err;
                     });
-                    let title = 'Account Deleted';
+                    let title = 'Account Deleted';      // success message
                     let message = req.body.username + ' has successfully been deleted from the database.'; // success message
                     res.render('templates/messageTemplate.html', { title: title, message: message, multipleMessages: false, color: '#6a9955' });
                     client.close();
@@ -147,11 +150,11 @@ module.exports = function (app)
         MongoClient.connect(url, function (err, client) {
             if (err) throw err;
             var db = client.db(process.env.DATABASE_NAME);
-            db.collection(process.env.COLLECTION_USERS).find().toArray((findErr, results) => // find all users
+            db.collection(process.env.COLLECTION_USERS).find().toArray((findErr, results) =>    // find all users in collection
             {
                 if (findErr) throw findErr;
                 else
-                    res.render('listusers.html', { users: results }); // display list
+                    res.render('listusers.html', { users: results });   // display all users
                 client.close();
             });
         });

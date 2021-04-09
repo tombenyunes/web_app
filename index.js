@@ -19,7 +19,7 @@ app.use(session({
 }));
 
 var MongoClient = require('mongodb').MongoClient;
-var url = "mongodb://localhost/calorieBuddyDB";
+var url = process.env.DATABASE_PATH + "/calorieBuddyDB";
 MongoClient.connect(url, function (err, db) {
     if (err) throw err;
     console.log("calorieBuddyDB connected");
